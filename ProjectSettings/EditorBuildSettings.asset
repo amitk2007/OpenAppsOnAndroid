@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Final Facebook.unity
     guid: 97f35071e3f322d4899ceec44e11d02a
   - enabled: 1
+    path: Assets/Scenes/Final Instagram.unity
+    guid: 4e6a43cd387b2cb4c8cc00bb2adc7159
+  - enabled: 1
     path: Assets/Scenes/Normal.unity
     guid: 15508076bbfba8447af01451ed3df2fb
   - enabled: 1

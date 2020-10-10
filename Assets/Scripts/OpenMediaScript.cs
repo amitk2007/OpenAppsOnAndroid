@@ -38,8 +38,8 @@ public enum mediaApplication
     /// http://youtube.com/
 
     youtubeVideo,
-    youtubeChannel,
     youtubeChannelURL = 29,
+    youtubeChannel, //https://support.google.com/youtube/answer/2657968?hl=en
     #endregion
     #region tiktok
     /// www.tiktok.com
@@ -131,19 +131,21 @@ public class OpenMediaScript : MonoBehaviour
         linksDictionary.Add(mediaApplication._9gagPost, "https://9gag.com/gag/");
         //Netflix
         linksDictionary.Add(mediaApplication.netflixShow, "https://www.netflix.com/title/");
+        //Reddit
+        linksDictionary.Add(mediaApplication.redditPost, "https://www.reddit.com/r/");
         #endregion
 
         #region complicated Apps (more then 2 links per app)
         //Facebook
         linksDictionary.Add(mediaApplication.facebookGroup, "fb://group/");//***//
         linksDictionary.Add(mediaApplication.facebookPage, "fb://page/");
-        linksDictionary.Add(mediaApplication.facebookPost, "fb://post/");//***//
+        linksDictionary.Add(mediaApplication.facebookPost, "https://www.facebook.com/");//*fb://post/*// add /?sfnsn=mo to make user log in
         linksDictionary.Add(mediaApplication.facebookProfile, "fb://facewebmodal/f?href=https://www.facebook.com/");
         //Instagram
-        linksDictionary.Add(mediaApplication.instagramPost, "");
+        linksDictionary.Add(mediaApplication.instagramPost, "instagram://media?id=");
         linksDictionary.Add(mediaApplication.instagramProfile, "instagram://user?username=");
         linksDictionary.Add(mediaApplication.instagramTag, "instagram://tag?name=");
-        linksDictionary.Add(mediaApplication.instagramTag, "instagram://tag?name=");
+        linksDictionary.Add(mediaApplication.instagramStory, "https://www.instagram.com/s/"); //Not relevent for now // maby if highlight //instagram-stories://
         //TikTok
         linksDictionary.Add(mediaApplication.tiktokPost, "https://vm.tiktok.com/");
         linksDictionary.Add(mediaApplication.tiktokSound, "https://vm.tiktok.com/");
@@ -163,39 +165,36 @@ public class OpenMediaScript : MonoBehaviour
     public void OpenAppLink()
     {
         LinkData data = EventSystem.current.currentSelectedGameObject.GetComponent<LinkData>();
-        Application.OpenURL(linksDictionary[data.application] + data.location);
-    }
+        string AppURL = linksDictionary[data.application];
 
-    #region Open Apps with multiple data
-    public void OpenWhatsAppLinkWithMessage()
-    {
-        data = EventSystem.current.currentSelectedGameObject.GetComponent<LinkData>();
         switch (data.application)
         {
             case mediaApplication.whatsappDirectQR:
-                Application.OpenURL("https://wa.me/" + data.location + "?text=" + data.message);
+                Application.OpenURL(AppURL + data.location + "?text=" + data.message);
                 break;
             case mediaApplication.whatsappDirectURL:
-                Application.OpenURL("https://api.whatsapp.com/send?phone=" + data.location + "&text=" + data.message);
+                Application.OpenURL(AppURL + data.location + "&text=" + data.message);
+                break;
+            case mediaApplication.redditPost:
+                Application.OpenURL(AppURL + data.location + "/comments/" + data.message);
                 break;
             default:
+                Application.OpenURL(AppURL + data.location + data.message);
                 break;
         }
-        //https://wa.me/+972543455365?text=hello
-        //https://api.whatsapp.com/send?phone=0543455369&text=helo
     }
-    public void OpenReditLink()
-    {
-        data = EventSystem.current.currentSelectedGameObject.GetComponent<LinkData>();
-        Application.OpenURL("https://www.reddit.com/r/" + data.location + "/comments/" + data.message);
-        //https://www.reddit.com/r/marvelmemes/comments/j6tl2r
-    }
+
+    //https://wa.me/+972543455365?text=hello
+    //https://api.whatsapp.com/send?phone=0543455369&text=helo
+    //https://www.reddit.com/r/marvelmemes/comments/j6tl2r
+
+
+    #region to sort later
     public void OpenGitHubProject()
     {
         data = EventSystem.current.currentSelectedGameObject.GetComponent<LinkData>();
         Application.OpenURL("https://github.com/" + data.location + "/" + data.message);
     }
-    #endregion
 
     public void JustOpenLink(string link)
     {
@@ -214,6 +213,7 @@ public class OpenMediaScript : MonoBehaviour
     {
         Application.OpenURL(URL);
     }
+    #endregion
 
 
     #region Button
