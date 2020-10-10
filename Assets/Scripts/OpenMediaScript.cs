@@ -17,6 +17,7 @@ youtu.be.com/user/USERNAME
 
 public enum mediaApplication
 {
+    URLLink,
     #region facebook
     /// www.facebook.com
 
@@ -38,6 +39,7 @@ public enum mediaApplication
 
     youtubeVideo,
     youtubeChannel,
+    youtubeChannelURL = 29,
     #endregion
     #region tiktok
     /// www.tiktok.com
@@ -115,10 +117,13 @@ public class OpenMediaScript : MonoBehaviour
     {
         //                              Media App & Methos,   URL
         linksDictionary = new Dictionary<mediaApplication, string>();
+
+        linksDictionary.Add(mediaApplication.URLLink, "");
         #region Simple Apps (One/Two links per app)
         //YouTube
         linksDictionary.Add(mediaApplication.youtubeChannel, "https://youtube.com/c/");
         linksDictionary.Add(mediaApplication.youtubeVideo, "https://youtu.be/");
+        linksDictionary.Add(mediaApplication.youtubeChannelURL, "https://www.youtube.com/channel/");
         //Discord
         linksDictionary.Add(mediaApplication.discordDirect, "https://discord.gg/channels/@me/");
         linksDictionary.Add(mediaApplication.discordGroup, "https://discord.gg/");
@@ -130,10 +135,10 @@ public class OpenMediaScript : MonoBehaviour
 
         #region complicated Apps (more then 2 links per app)
         //Facebook
-        linksDictionary.Add(mediaApplication.facebookGroup, "");
+        linksDictionary.Add(mediaApplication.facebookGroup, "fb://group/");//***//
         linksDictionary.Add(mediaApplication.facebookPage, "fb://page/");
-        linksDictionary.Add(mediaApplication.facebookPost, "");
-        linksDictionary.Add(mediaApplication.facebookProfile, "fb://profile/");
+        linksDictionary.Add(mediaApplication.facebookPost, "fb://post/");//***//
+        linksDictionary.Add(mediaApplication.facebookProfile, "fb://facewebmodal/f?href=https://www.facebook.com/");
         //Instagram
         linksDictionary.Add(mediaApplication.instagramPost, "");
         linksDictionary.Add(mediaApplication.instagramProfile, "instagram://user?username=");
@@ -160,7 +165,7 @@ public class OpenMediaScript : MonoBehaviour
         LinkData data = EventSystem.current.currentSelectedGameObject.GetComponent<LinkData>();
         Application.OpenURL(linksDictionary[data.application] + data.location);
     }
-    
+
     #region Open Apps with multiple data
     public void OpenWhatsAppLinkWithMessage()
     {
